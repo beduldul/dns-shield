@@ -1,0 +1,84 @@
+# Secrets and local configuration -- never commit these.
+.env
+.env.*
+!.env.example
+*.env
+secrets
+secrets.*
+secrets/
+secret
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+credentials*.yml
+service-account*.json
+.netrc
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.python-version
+
+# Testing and coverage
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.hypothesis/
+.mypy_cache/
+.dmypy.json
+ruff_cache/
+.benchmarks/
+
+# Build tooling
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+site/
+
+# Editors and OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Local scratch -- diagnostic output may contain personal network details.
+*.local
+scratch/
