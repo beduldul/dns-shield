@@ -1,15 +1,17 @@
 [build-system]
-requires = ["hatchling>=1.24"]
+requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [project]
 name = "dns-shield"
 version = "0.1.0"
-description = "Detect ISP DNS poisoning and transparently work around it with DNS-over-HTTPS and SNI-preserving connections."
-readme = "README.md"
+description = "Detect ISP DNS poisoning and work around it with DNS-over-HTTPS and SNI-preserving connections."
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
-license = { text = "MIT" }
-authors = [{ name = "beduldul", email = "alkaysan07@gmail.com" }]
+# SPDX expression (PEP 639). The text of the licence ships via license-files.
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Abdul Afif Al Kaysan", email = "alkaysan07@gmail.com" }]
 keywords = [
     "dns",
     "dns-over-https",
@@ -25,7 +27,6 @@ classifiers = [
     "Environment :: Console",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
@@ -49,14 +50,19 @@ dependencies = []
 [project.optional-dependencies]
 # The optional requests transport adapter. Nothing else needs it.
 requests = ["requests>=2.28"]
-# httpx support is not implemented; listed here only to keep the intent clear.
+# Development and CI tooling: test suite, coverage, lint, types, packaging.
 dev = [
     "pytest>=7.4",
     "pytest-cov>=4.1",
+    "ruff>=0.6",
+    "mypy>=1.10",
+    "build>=1.2",
+    "twine>=5.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/beduldul/dns-shield"
+Repository = "https://github.com/beduldul/dns-shield"
 Source = "https://github.com/beduldul/dns-shield"
 Issues = "https://github.com/beduldul/dns-shield/issues"
 Changelog = "https://github.com/beduldul/dns-shield/blob/main/CHANGELOG.md"
