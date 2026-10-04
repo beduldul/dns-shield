@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-04
+
+### Changed
+
+- Packaging and release metadata only; no code or behaviour changes from the
+  entries below. Added complete PyPI metadata (PEP 639 `license` expression,
+  author, project URLs and classifiers) and a Trusted Publishing (OIDC) release
+  workflow that publishes on `v*` tags.
+
 ### Fixed
 
 - **A false `POISONED` verdict when both resolvers returned the same address.**
@@ -105,5 +114,6 @@ Initial release.
   consistent with poisoning and records the latency as evidence rather than
   making it the verdict.
 
-[Unreleased]: https://github.com/beduldul/dns-shield/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/beduldul/dns-shield/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/beduldul/dns-shield/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/beduldul/dns-shield/releases/tag/v0.1.0

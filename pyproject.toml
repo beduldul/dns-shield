@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "dns-shield"
-version = "0.1.0"
+version = "0.1.1"
 description = "Detect ISP DNS poisoning and work around it with DNS-over-HTTPS and SNI-preserving connections."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
