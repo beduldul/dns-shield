@@ -155,14 +155,16 @@ willing to say "unreachable" or "I don't know":
 
 ## Install
 
+**Not yet on PyPI — install from GitHub for now.**
+
 ```bash
-pip install dns-shield
+pip install "git+https://github.com/beduldul/dns-shield.git"
 ```
 
 Optional, only if you want the `requests` adapter:
 
 ```bash
-pip install "dns-shield[requests]"
+pip install "dns-shield[requests] @ git+https://github.com/beduldul/dns-shield.git"
 ```
 
 Then:
