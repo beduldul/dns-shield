@@ -30,7 +30,7 @@ __all__ = [
 ]
 
 #: Version reported to servers. Kept generic: it should not advertise the tool.
-USER_AGENT: Final[str] = "dns-shield/0.1.1 (+https://github.com/beduldul/dns-shield)"
+USER_AGENT: Final[str] = "dns-shield/0.1.2 (+https://github.com/beduldul/dns-shield)"
 
 # -- Resolution ------------------------------------------------------------
 

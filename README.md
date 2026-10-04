@@ -1,4 +1,5 @@
 [![CI](https://github.com/beduldul/dns-shield/actions/workflows/ci.yml/badge.svg)](https://github.com/beduldul/dns-shield/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/dns-shield.svg)](https://pypi.org/project/dns-shield/)
 # dns-shield
 
 **Your ISP probably isn't blocking that site — it's lying to your resolver.**
@@ -155,16 +156,20 @@ willing to say "unreachable" or "I don't know":
 
 ## Install
 
-**Not yet on PyPI — install from GitHub for now.**
-
 ```bash
-pip install "git+https://github.com/beduldul/dns-shield.git"
+pip install dns-shield
 ```
 
 Optional, only if you want the `requests` adapter:
 
 ```bash
-pip install "dns-shield[requests] @ git+https://github.com/beduldul/dns-shield.git"
+pip install "dns-shield[requests]"
+```
+
+To track `main` instead of a release:
+
+```bash
+pip install "git+https://github.com/beduldul/dns-shield.git"
 ```
 
 Then:

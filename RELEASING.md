@@ -4,11 +4,11 @@ This project publishes to PyPI with **Trusted Publishing (OIDC)**. There is no
 API token to create, store, rotate or leak: GitHub mints a short-lived identity
 token for the release workflow and PyPI verifies it.
 
-> **Status: not yet published.** `dns-shield` is **not on PyPI** yet, which is
-> why the README still installs from GitHub:
-> `pip install "git+https://github.com/beduldul/dns-shield.git"`.
-> Only after the first successful publish should that line become a plain
-> `pip install dns-shield`. Do not change the README before then.
+> **Status: published.** `dns-shield` 0.1.1 is live on PyPI, and the README
+> install line is the plain `pip install dns-shield`. The pending publisher was
+> converted to a normal publisher on the project, so every later tag publishes
+> without further setup. A GitHub-install line is kept only for tracking `main`
+> ahead of a release, and is labelled as such.
 
 ---
 
@@ -54,13 +54,15 @@ twine check dist/*
 unzip -l dist/*.whl   # confirm dns_shield/ + py.typed are present, tests absent
 ```
 
-## First-release caveat (honest)
+## First-release caveat (done)
+
+Kept as a record of the 0.1.0 release; it no longer applies.
 
 - The pending publisher must exist on PyPI **before** the first `v*` tag is
   pushed, or the publish step fails with an OIDC/trust error.
 - PyPI project names are claimed permanently on first upload; `dns-shield` is
-  free today (the PyPI JSON API returns HTTP 404 for it).
+  now claimed by this project.
 - The version number can never be reused or overwritten once uploaded, even if
-  the release is later yanked — pick `0.1.0` deliberately for the first one.
+  the release is later yanked.
 - A tag push with a version that already exists on PyPI will fail the publish
   step; that is expected, not a bug.
