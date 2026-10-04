@@ -1,3 +1,4 @@
+[![CI](https://github.com/beduldul/dns-shield/actions/workflows/ci.yml/badge.svg)](https://github.com/beduldul/dns-shield/actions/workflows/ci.yml)
 # dns-shield
 
 **Your ISP probably isn't blocking that site — it's lying to your resolver.**
