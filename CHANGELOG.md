@@ -7,6 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-10-05
+
+### Fixed
+
+- **Bad usage now exits `3`, matching the documented contract.** The README
+  published `3` for bad usage and `EXIT_USAGE = 3` existed in the code, but
+  `main()` did not catch argparse's `SystemExit`, so a bad command line exited
+  argparse's default `2`. `main()` now maps argparse's usage error to
+  `EXIT_USAGE`. This changes the observed exit code for bad usage from `2` to
+  `3`. (`--help` and `--version` still exit `0`.)
+- **`RequestsShieldAdapter` is re-exported from the top level.** The README
+  named it but the import `from dns_shield import RequestsShieldAdapter` failed;
+  the class was only reachable as `dns_shield.patch.RequestsShieldAdapter`. It is
+  now part of the public API, consistent with the other `patch` names
+  (`ShieldSession`, `resolve_and_call`, `shielded_client`).
+
+### Changed
+
+- **The body-level error-code example in the README was misleading.** It implied
+  `client.get_json(url, contract=BINANCE_SUCCESS_CONTRACT)` raises on any `200`.
+  It does not: a plain `200 {}` passes through, and the contract fires when the
+  named field is present with an unexpected value. The example and its wording
+  now say this explicitly.
+
+### Added
+
+- `TestDocumentedExitCodeContract` runs the real CLI in a subprocess and pins
+  every documented exit code (0/1/2/3), so the table cannot drift again.
+
 ## [0.1.2] - 2026-10-04
 
 ### Changed

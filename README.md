@@ -305,19 +305,27 @@ resolver = DohResolver(mine)          # any `application/dns-json` endpoint
 Body-level error codes (an API that returns HTTP 200 with an error inside):
 
 ```python
-from dns_shield import SniHTTPClient, BINANCE_SUCCESS_CONTRACT
+from dns_shield import SniHTTPClient, BINANCE_SUCCESS_CONTRACT, TransportError
 
 client = SniHTTPClient()
-# A verified trap: this returns HTTP 200 with {"code": "11012030"}.
+# Binance's fapi hosts answer HTTP 200 with {"code": "000000"} on success and a
+# non-zero "code" inside a 200 on failure. BINANCE_SUCCESS_CONTRACT checks that
+# field: a healthy 200 with code "000000" passes through unchanged, and a
+# body-level error raises TransportError even though the status was 200.
 try:
-    client.get_json(url, contract=BINANCE_SUCCESS_CONTRACT)
-except Exception as exc:
+    payload = client.get_json(url, contract=BINANCE_SUCCESS_CONTRACT)
+except TransportError as exc:
     print("body-level failure:", exc)
 
 # Or define your own contract
 from dns_shield import SuccessContract
 client.get_json(url, contract=SuccessContract(field="status", value="ok"))
 ```
+
+A plain `200 {}` does **not** raise: the contract only fires when the named
+field is present and holds an unexpected value (or the body is not JSON at all).
+`BINANCE_SUCCESS_CONTRACT` raises on `{"code": "11012030"}` but returns the
+parsed `{"code": "000000"}` unchanged.
 
 ---
 
@@ -488,7 +496,7 @@ this library makes for you.
 
 | Optional extra | Why |
 |---|---|
-| `requests>=2.28` | Only for `RequestsShieldAdapter`. Not needed for the CLI or the main API. |
+| `requests>=2.28` | Only for `RequestsShieldAdapter` (importable from the top level: `from dns_shield import RequestsShieldAdapter`). Not needed for the CLI or the main API. |
 
 | Dev | Why |
 |---|---|

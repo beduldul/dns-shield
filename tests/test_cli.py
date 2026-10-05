@@ -7,6 +7,8 @@ network layers monkeypatched, so exit-code semantics are tested directly.
 from __future__ import annotations
 
 import json
+import subprocess
+import sys
 from typing import Any
 
 import pytest
@@ -316,26 +318,92 @@ class TestArgumentHandling:
     def test_missing_subcommand_exits_with_usage_error(self) -> None:
         with pytest.raises(SystemExit) as excinfo:
             cli.main([])
-        assert excinfo.value.code == 2
+        assert excinfo.value.code == 3
 
     def test_unknown_subcommand_exits_with_usage_error(self) -> None:
         with pytest.raises(SystemExit) as excinfo:
             cli.main(["nonsense"])
-        assert excinfo.value.code == 2
+        assert excinfo.value.code == 3
 
     def test_unknown_provider_is_rejected(self) -> None:
-        with pytest.raises(SystemExit):
+        with pytest.raises(SystemExit) as excinfo:
             cli.main(["check", "h.example", "--provider", "not-real"])
+        assert excinfo.value.code == 3
 
     def test_missing_host_argument_is_rejected(self) -> None:
-        with pytest.raises(SystemExit):
+        with pytest.raises(SystemExit) as excinfo:
             cli.main(["check"])
+        assert excinfo.value.code == 3
 
     def test_version_flag(self, capsys: pytest.CaptureFixture[str]) -> None:
         with pytest.raises(SystemExit) as excinfo:
             cli.main(["--version"])
         assert excinfo.value.code == 0
         assert "dns-shield" in capsys.readouterr().out
+
+
+# -- documented exit-code contract -----------------------------------------
+#
+# The README publishes a table of exit codes. Nothing asserted it, which is how
+# the CLI drifted to argparse's default 2 for usage errors while the README (and
+# the unused EXIT_USAGE constant) said 3. These run the real CLI in a subprocess
+# and assert the real process exit code, so the contract is pinned end to end.
+
+_VERDICT_DRIVER = """
+import sys
+from dns_shield import cli
+from dns_shield.detect import Diagnosis, Evidence, Verdict
+
+verdict = Verdict[sys.argv[1]]
+cli.diagnose = lambda *a, **k: Diagnosis("h.example", verdict, "", Evidence("h.example"))
+sys.exit(cli.main(sys.argv[2:]))
+"""
+
+
+class TestDocumentedExitCodeContract:
+    @staticmethod
+    def _verdict_process(verdict: str, *args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, "-c", _VERDICT_DRIVER, verdict, *args],
+            capture_output=True,
+            text=True,
+        )
+
+    @staticmethod
+    def _cli_process(*args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, "-m", "dns_shield.cli", *args],
+            capture_output=True,
+            text=True,
+        )
+
+    def test_healthy_exits_zero(self) -> None:
+        assert self._verdict_process("HEALTHY", "check", "h.example").returncode == 0
+
+    def test_poisoned_exits_one(self) -> None:
+        assert self._verdict_process("POISONED", "check", "h.example").returncode == 1
+
+    def test_suspicious_exits_one(self) -> None:
+        assert self._verdict_process("SUSPICIOUS", "check", "h.example").returncode == 1
+
+    def test_unreachable_exits_two(self) -> None:
+        assert self._verdict_process("UNREACHABLE", "check", "h.example").returncode == 2
+
+    def test_unknown_exits_two(self) -> None:
+        assert self._verdict_process("UNKNOWN", "check", "h.example").returncode == 2
+
+    def test_bad_usage_exits_three(self) -> None:
+        """A usage error must exit 3, as the README documents — not argparse's 2."""
+        result = self._cli_process("check")  # no host argument
+        assert result.returncode == 3
+        assert "usage:" in result.stderr
+
+    def test_unknown_subcommand_exits_three(self) -> None:
+        assert self._cli_process("nonsense").returncode == 3
+
+    def test_help_still_exits_zero(self) -> None:
+        """--help is not a usage error; it must keep exiting 0."""
+        assert self._cli_process("--help").returncode == 0
 
 
 # -- offline safety --------------------------------------------------------

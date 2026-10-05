@@ -447,7 +447,7 @@ def probe_http(
             request = (
                 f"GET {path} HTTP/1.1\r\n"
                 f"Host: {host}\r\n"
-                "User-Agent: dns-shield/0.1.2\r\n"
+                "User-Agent: dns-shield/0.1.3\r\n"
                 "Accept: */*\r\n"
                 "Connection: close\r\n\r\n"
             ).encode()

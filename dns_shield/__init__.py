@@ -46,7 +46,12 @@ from .detect import (
     probe_http,
     system_resolve,
 )
-from .patch import ShieldSession, resolve_and_call, shielded_client
+from .patch import (
+    RequestsShieldAdapter,
+    ShieldSession,
+    resolve_and_call,
+    shielded_client,
+)
 from .resolve import (
     PROVIDERS,
     DohProvider,
@@ -63,7 +68,7 @@ from .transport import (
     TransportError,
 )
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 __all__ = [
     "BINANCE_SUCCESS_CONTRACT",
@@ -76,6 +81,7 @@ __all__ = [
     "PROVIDERS",
     "ProbeResult",
     "RecordSet",
+    "RequestsShieldAdapter",
     "ResolvedHost",
     "ShieldResponse",
     "ShieldSession",

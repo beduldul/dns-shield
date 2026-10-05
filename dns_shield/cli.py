@@ -346,9 +346,22 @@ def _now_iso() -> str:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
-    """Run the CLI. Returns the process exit code."""
+    """Run the CLI. Returns the process exit code.
+
+    A usage error exits :data:`EXIT_USAGE` (3), as documented. ``argparse``
+    exits ``2`` on its own for a bad command line, which would contradict the
+    documented contract (and collide with the "inconclusive" code), so its
+    ``SystemExit`` is caught and re-raised with the documented code.
+    """
     parser = _build_parser()
-    args = parser.parse_args(argv)
+    try:
+        args = parser.parse_args(argv)
+    except SystemExit as exc:
+        # argparse exits 0 for --help/--version and 2 for a usage error.
+        code = exc.code if isinstance(exc.code, int) else 2
+        if code == 0:
+            raise
+        raise SystemExit(EXIT_USAGE) from None
 
     if args.command == "check":
         return _cmd_check(args)
